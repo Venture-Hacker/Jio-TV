@@ -1,0 +1,32 @@
+{
+  "name": "jiotv-tizenmod",
+  "version": "1.0.0",
+  "description": "Standalone JioTV streaming module for Samsung Smart TVs with full remote control and TV-optimized interface",
+  "main": "app/index.html",
+  "scripts": {
+    "start": "npx serve app -p 8080"
+  },
+  "tizenbrew": {
+    "name": "JioTV Live",
+    "description": "Stream 600+ Live JioTV channels natively on your Samsung Smart TV",
+    "author": "JioTV Tizen Community",
+    "icon": "https://raw.githubusercontent.com/jiotv-go/jiotv_go/main/assets/jiotv.png",
+    "entry": "app/index.html",
+    "type": "web",
+    "permissions": [
+      "http://tizen.org/privilege/internet",
+      "http://tizen.org/privilege/tv.inputdevice",
+      "http://tizen.org/privilege/tv.audio",
+      "http://tizen.org/privilege/tv.window"
+    ]
+  },
+  "keywords": [
+    "tizenbrew",
+    "samsung-tv",
+    "tizen",
+    "jiotv",
+    "live-tv",
+    "iptv"
+  ],
+  "license": "MIT"
+}

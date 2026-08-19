@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>JioTV Live - Samsung Smart TV</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Hls.js for Universal HLS Playback -->
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.8/dist/hls.min.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!-- App Header -->
+        <header class="app-header">
+            <div class="brand-section">
+                <img src="https://raw.githubusercontent.com/jiotv-go/jiotv_go/main/assets/jiotv.png" alt="JioTV" class="brand-logo" onerror="this.style.display='none'" />
+                <div class="brand-title">JioTV <span>Live</span></div>
+            </div>
+
+            <!-- Category Tabs Bar -->
+            <div class="categories-bar" id="categories-bar"></div>
+
+            <div class="header-info">
+                <div id="clock">00:00</div>
+            </div>
+        </header>
+
+        <!-- Remote Shortcut Guide -->
+        <div class="remote-legend">
+            <div class="legend-item"><span class="color-dot red"></span> <span>Red: Login / Back</span></div>
+            <div class="legend-item"><span class="color-dot yellow"></span> <span>Yellow: Refresh Channels</span></div>
+            <div class="legend-item"><span class="color-dot blue"></span> <span>Blue: Quality / Audio</span></div>
+            <div class="legend-item"><span>[0-9]: Quick Channel Number</span></div>
+        </div>
+
+        <!-- Channel Grid -->
+        <main class="grid-container">
+            <div id="grid-loader" class="player-loader" style="display: none; position: static; margin-top: 100px;">
+                <div class="spinner"></div>
+                <div>Loading Channels...</div>
+            </div>
+            <div class="channel-grid" id="channel-grid"></div>
+        </main>
+
+        <!-- Fullscreen Video Player Screen -->
+        <div id="player-screen">
+            <video id="video-player" playsinline autoplay></video>
+
+            <!-- Loading Spinner -->
+            <div id="player-loader" class="player-loader">
+                <div class="spinner"></div>
+                <div>Connecting Live Stream...</div>
+            </div>
+
+            <!-- On Screen Display Overlay -->
+            <div id="player-osd" class="player-osd">
+                <div class="osd-channel-info">
+                    <img id="osd-logo" class="osd-logo" src="" alt="" />
+                    <div>
+                        <div class="osd-name" id="osd-channel-name">Channel Name</div>
+                        <div class="osd-meta" id="osd-category">Category • Language</div>
+                    </div>
+                </div>
+
+                <div class="osd-badges">
+                    <div class="badge live">● LIVE</div>
+                    <div class="badge quality" id="player-quality-badge">AUTO</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Login Modal -->
+        <div id="login-modal" class="modal-overlay">
+            <div class="modal-box">
+                <div class="modal-title">JioTV Login</div>
+                <div class="modal-sub">Log in with your Jio mobile number to unlock live channels directly on your TV.</div>
+
+                <div class="form-group" id="login-phone-group">
+                    <label class="form-label" for="phone-input">Jio Mobile Number</label>
+                    <input type="tel" id="phone-input" class="form-input" placeholder="e.g. 9876543210" maxlength="10" />
+                </div>
+
+                <div class="form-group" id="login-otp-group" style="display: none;">
+                    <label class="form-label" for="otp-input">Enter OTP sent to your phone</label>
+                    <input type="number" id="otp-input" class="form-input" placeholder="Enter 6-digit OTP" maxlength="6" />
+                </div>
+
+                <button id="login-submit-btn" class="modal-btn">Send OTP</button>
+            </div>
+        </div>
+
+        <!-- Toast Notification -->
+        <div id="toast"></div>
+    </div>
+
+    <!-- Application Scripts -->
+    <script src="jiotv-api.js"></script>
+    <script src="remote.js"></script>
+    <script src="player.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
