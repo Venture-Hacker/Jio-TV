@@ -71,11 +71,12 @@ Because your Samsung TV needs a web URL to load the module into TizenBrew:
 | **Arrow Up / Down** | Move across channel rows / category tabs | Next / Previous Channel |
 | **Arrow Left / Right** | Move across channel cards / tabs | - |
 | **Enter / OK** | Select category / Play channel | Play / Pause |
-| **Red Button 🔴** | Open Login / Settings | Exit video back to channel grid |
+| **Red Button 🔴** | Open Login / Logout | Exit video back to channel grid |
+| **Green Button 🟢** | **Search Channels by Name / Category** | - |
 | **Yellow Button 🟡** | Force refresh channel list from Jio | - |
 | **Blue Button 🔵** | - | Cycle stream quality (Auto / HD / SD) |
 | **Numbers 0–9** | Direct channel tuning | Direct channel tuning |
-| **Return / Back** | Close modal | Exit player |
+| **Return / Back** | Close search / login modal | Exit player |
 
 ---
 

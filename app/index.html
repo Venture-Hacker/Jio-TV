@@ -21,16 +21,18 @@
             <div class="categories-bar" id="categories-bar"></div>
 
             <div class="header-info">
+                <div id="search-trigger-btn" class="search-btn">🔍 Search</div>
                 <div id="clock">00:00</div>
             </div>
         </header>
 
         <!-- Remote Shortcut Guide -->
         <div class="remote-legend">
-            <div class="legend-item"><span class="color-dot red"></span> <span>Red: Login / Back</span></div>
+            <div class="legend-item"><span class="color-dot red"></span> <span>Red: Login</span></div>
+            <div class="legend-item"><span class="color-dot green"></span> <span>Green: Search</span></div>
             <div class="legend-item"><span class="color-dot yellow"></span> <span>Yellow: Refresh Channels</span></div>
-            <div class="legend-item"><span class="color-dot blue"></span> <span>Blue: Quality / Audio</span></div>
-            <div class="legend-item"><span>[0-9]: Quick Channel Number</span></div>
+            <div class="legend-item"><span class="color-dot blue"></span> <span>Blue: Quality</span></div>
+            <div class="legend-item"><span>[0-9]: Channel Number</span></div>
         </div>
 
         <!-- Channel Grid -->
@@ -86,6 +88,23 @@
                 </div>
 
                 <button id="login-submit-btn" class="modal-btn">Send OTP</button>
+            </div>
+        </div>
+
+        <!-- Search Modal -->
+        <div id="search-modal" class="modal-overlay">
+            <div class="modal-box">
+                <div class="modal-title">🔍 Search Channels</div>
+                <div class="modal-sub">Search across 600+ channels by name, category, or language.</div>
+
+                <div class="form-group">
+                    <input type="text" id="search-input" class="form-input" placeholder="Type channel name (e.g. Sony, Star, Aaj Tak, Sports)..." />
+                </div>
+
+                <div style="display: flex; gap: 12px;">
+                    <button id="search-submit-btn" class="modal-btn" style="flex: 2;">Search</button>
+                    <button id="search-clear-btn" class="modal-btn" style="flex: 1; background-color: var(--bg-card);">Clear</button>
+                </div>
             </div>
         </div>
 

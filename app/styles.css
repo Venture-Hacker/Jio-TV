@@ -114,10 +114,28 @@ body {
 .header-info {
     display: flex;
     align-items: center;
-    gap: 24px;
+    gap: 20px;
     font-size: 20px;
     font-weight: 600;
     color: var(--text-secondary);
+}
+
+.search-btn {
+    padding: 8px 18px;
+    background-color: var(--bg-card);
+    border-radius: 20px;
+    font-size: 16px;
+    font-weight: 700;
+    color: #ffffff;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s;
+}
+
+.search-btn:hover, .search-btn.focused {
+    border: var(--focus-border);
+    box-shadow: var(--focus-shadow);
+    background-color: var(--accent);
 }
 
 /* Remote Legend Bar */

@@ -10,11 +10,12 @@ class App {
         this.categories = ['All', 'Entertainment', 'Sports', 'Movies', 'News', 'Music', 'Kids', 'Infotainment'];
         
         // Navigation state
-        this.currentView = 'grid'; // 'grid' | 'categories' | 'player' | 'login' | 'settings'
+        this.currentView = 'grid'; // 'grid' | 'categories' | 'player' | 'login' | 'search'
         this.focusedCategoryIndex = 0;
         this.focusedChannelIndex = 0;
         this.loginStep = 'phone'; // 'phone' | 'otp'
         this.enteredPhone = '';
+        this.searchQuery = '';
         this.focusedInputIndex = 0;
 
         this.init();
@@ -32,6 +33,21 @@ class App {
 
         // Bind Remote Events
         this.bindRemoteEvents();
+
+        // Bind Search Click
+        const searchBtn = document.getElementById('search-trigger-btn');
+        if (searchBtn) searchBtn.addEventListener('click', () => this.showSearchModal());
+
+        const searchInput = document.getElementById('search-input');
+        if (searchInput) {
+            searchInput.addEventListener('input', (e) => this.handleSearchInput(e.target.value));
+        }
+
+        const searchSubmitBtn = document.getElementById('search-submit-btn');
+        if (searchSubmitBtn) searchSubmitBtn.addEventListener('click', () => this.applySearch());
+
+        const searchClearBtn = document.getElementById('search-clear-btn');
+        if (searchClearBtn) searchClearBtn.addEventListener('click', () => this.clearSearch());
 
         // Check Login Status
         if (!window.jioAPI.isLoggedIn()) {
@@ -82,14 +98,26 @@ class App {
     }
 
     filterChannels() {
-        if (this.currentCategory === 'All') {
-            this.filteredChannels = this.channels;
-        } else {
-            this.filteredChannels = this.channels.filter(ch => 
+        let result = this.channels;
+
+        // Apply category filter
+        if (this.currentCategory !== 'All') {
+            result = result.filter(ch => 
                 ch.category && ch.category.toLowerCase().includes(this.currentCategory.toLowerCase())
             );
         }
 
+        // Apply search query filter
+        if (this.searchQuery) {
+            const q = this.searchQuery.toLowerCase();
+            result = result.filter(ch => 
+                ch.name.toLowerCase().includes(q) ||
+                (ch.category && ch.category.toLowerCase().includes(q)) ||
+                (ch.language && ch.language.toLowerCase().includes(q))
+            );
+        }
+
+        this.filteredChannels = result;
         this.renderGrid();
     }
 
@@ -159,6 +187,7 @@ class App {
 
         // Color buttons
         rc.on('red', () => this.handleRedButton());
+        rc.on('green', () => this.handleGreenButton());
         rc.on('yellow', () => this.handleYellowButton());
         rc.on('blue', () => this.handleBlueButton());
 
@@ -167,6 +196,48 @@ class App {
         rc.on('channelUp', () => this.changeChannelOffset(1));
         rc.on('channelDown', () => this.changeChannelOffset(-1));
         rc.on('playPause', () => window.videoPlayer.togglePlayPause());
+    }
+
+    handleGreenButton() {
+        if (this.currentView === 'search') {
+            this.hideModals();
+            this.currentView = 'grid';
+        } else {
+            this.showSearchModal();
+        }
+    }
+
+    showSearchModal() {
+        this.currentView = 'search';
+        const modal = document.getElementById('search-modal');
+        if (modal) modal.classList.add('active');
+
+        const input = document.getElementById('search-input');
+        if (input) {
+            input.value = this.searchQuery;
+            input.focus();
+            input.classList.add('focused');
+        }
+    }
+
+    handleSearchInput(val) {
+        this.searchQuery = val.trim();
+        this.filterChannels();
+    }
+
+    applySearch() {
+        this.hideModals();
+        this.currentView = 'grid';
+        this.filterChannels();
+        this.showToast(`Found ${this.filteredChannels.length} channels`);
+        this.updateChannelFocus();
+    }
+
+    clearSearch() {
+        this.searchQuery = '';
+        const input = document.getElementById('search-input');
+        if (input) input.value = '';
+        this.applySearch();
     }
 
     handleUp() {
@@ -250,7 +321,7 @@ class App {
             window.videoPlayer.stop();
             this.currentView = 'grid';
             this.updateChannelFocus();
-        } else if (this.currentView === 'login' || this.currentView === 'settings') {
+        } else if (this.currentView === 'login' || this.currentView === 'settings' || this.currentView === 'search') {
             this.hideModals();
             this.currentView = 'grid';
             this.updateChannelFocus();
