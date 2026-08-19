@@ -54,7 +54,7 @@ class JioTVAPI {
     }
 
     /**
-     * Send OTP to a Jio mobile number
+     * Send OTP to a Jio mobile number with automatic CORS proxy fallbacks
      * @param {string} mobileNumber 10-digit Jio phone number
      */
     async sendOTP(mobileNumber) {
@@ -63,37 +63,55 @@ class JioTVAPI {
             throw new Error('Please enter a valid 10-digit mobile number');
         }
 
+        const targetUrl = `${this.AUTH_BASE_URL}/send`;
         const payload = {
             number: cleanedNumber,
             appName: 'RJIL_JioTV'
         };
 
-        const response = await fetch(`${this.AUTH_BASE_URL}/send`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'app-name': 'RJIL_JioTV',
-                'devicetype': 'phone',
-                'os': 'Android'
-            },
-            body: JSON.stringify(payload)
-        });
+        const headers = {
+            'Content-Type': 'application/json',
+            'app-name': 'RJIL_JioTV',
+            'devicetype': 'phone',
+            'os': 'Android'
+        };
 
-        if (!response.ok) {
-            const err = await response.json().catch(() => ({}));
-            throw new Error(err.message || `Failed to send OTP (HTTP ${response.status})`);
+        // Try direct first, then CORS proxy fallbacks
+        const endpoints = [
+            targetUrl,
+            `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`,
+            `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(targetUrl)}`
+        ];
+
+        let lastError = null;
+        for (const url of endpoints) {
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: headers,
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    return await response.json();
+                }
+            } catch (e) {
+                lastError = e;
+                console.warn(`[JioTV API] OTP send failed on ${url}:`, e);
+            }
         }
 
-        return await response.json();
+        throw new Error(lastError ? lastError.message : 'Failed to send OTP. Check internet connection.');
     }
 
     /**
-     * Verify OTP and obtain authentication tokens
+     * Verify OTP and obtain authentication tokens with CORS proxy fallbacks
      * @param {string} mobileNumber 
      * @param {string} otp 
      */
     async verifyOTP(mobileNumber, otp) {
         const cleanedNumber = mobileNumber.replace(/\D/g, '');
+        const targetUrl = `${this.AUTH_BASE_URL}/verify`;
         const payload = {
             number: cleanedNumber,
             otp: otp.trim(),
@@ -102,23 +120,42 @@ class JioTVAPI {
             os: 'Android'
         };
 
-        const response = await fetch(`${this.AUTH_BASE_URL}/verify`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'app-name': 'RJIL_JioTV',
-                'devicetype': 'phone',
-                'os': 'Android'
-            },
-            body: JSON.stringify(payload)
-        });
+        const headers = {
+            'Content-Type': 'application/json',
+            'app-name': 'RJIL_JioTV',
+            'devicetype': 'phone',
+            'os': 'Android'
+        };
 
-        if (!response.ok) {
-            const err = await response.json().catch(() => ({}));
-            throw new Error(err.message || `Invalid OTP or verification failed (HTTP ${response.status})`);
+        const endpoints = [
+            targetUrl,
+            `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`,
+            `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(targetUrl)}`
+        ];
+
+        let result = null;
+        let lastError = null;
+        for (const url of endpoints) {
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: headers,
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    result = await response.json();
+                    break;
+                }
+            } catch (e) {
+                lastError = e;
+                console.warn(`[JioTV API] OTP verify failed on ${url}:`, e);
+            }
         }
 
-        const result = await response.json();
+        if (!result) {
+            throw new Error(lastError ? lastError.message : 'Invalid OTP or verification failed.');
+        }
         
         const authData = {
             mobile: cleanedNumber,

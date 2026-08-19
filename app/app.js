@@ -241,6 +241,17 @@ class App {
     }
 
     handleUp() {
+        if (this.currentView === 'login') {
+            const input = this.loginStep === 'phone' ? document.getElementById('phone-input') : document.getElementById('otp-input');
+            const btn = document.getElementById('login-submit-btn');
+            if (btn) btn.classList.remove('focused');
+            if (input) {
+                input.classList.add('focused');
+                input.focus();
+            }
+            return;
+        }
+
         if (this.currentView === 'grid') {
             const columns = this.getGridColumns();
             if (this.focusedChannelIndex - columns >= 0) {
@@ -257,6 +268,17 @@ class App {
     }
 
     handleDown() {
+        if (this.currentView === 'login') {
+            const input = this.loginStep === 'phone' ? document.getElementById('phone-input') : document.getElementById('otp-input');
+            const btn = document.getElementById('login-submit-btn');
+            if (input) input.classList.remove('focused');
+            if (btn) {
+                btn.classList.add('focused');
+                btn.focus();
+            }
+            return;
+        }
+
         if (this.currentView === 'categories') {
             this.currentView = 'grid';
             this.updateCategoryFocus();
@@ -303,6 +325,11 @@ class App {
     }
 
     handleEnter() {
+        if (this.currentView === 'login') {
+            this.submitLoginForm();
+            return;
+        }
+
         if (this.currentView === 'grid') {
             const ch = this.filteredChannels[this.focusedChannelIndex];
             if (ch) this.playChannel(ch);
@@ -311,8 +338,8 @@ class App {
             this.updateChannelFocus();
         } else if (this.currentView === 'player') {
             window.videoPlayer.togglePlayPause();
-        } else if (this.currentView === 'login') {
-            this.submitLoginForm();
+        } else if (this.currentView === 'search') {
+            this.applySearch();
         }
     }
 
