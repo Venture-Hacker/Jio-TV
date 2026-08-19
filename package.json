@@ -1,32 +1,33 @@
 {
   "name": "jiotv-tizenmod",
   "version": "1.0.0",
-  "description": "Standalone JioTV streaming module for Samsung Smart TVs with full remote control and TV-optimized interface",
-  "main": "app/index.html",
-  "scripts": {
-    "start": "npx serve app -p 8080"
-  },
-  "tizenbrew": {
-    "name": "JioTV Live",
-    "description": "Stream 600+ Live JioTV channels natively on your Samsung Smart TV",
-    "author": "JioTV Tizen Community",
-    "icon": "https://raw.githubusercontent.com/jiotv-go/jiotv_go/main/assets/jiotv.png",
-    "entry": "app/index.html",
-    "type": "web",
-    "permissions": [
-      "http://tizen.org/privilege/internet",
-      "http://tizen.org/privilege/tv.inputdevice",
-      "http://tizen.org/privilege/tv.audio",
-      "http://tizen.org/privilege/tv.window"
-    ]
-  },
-  "keywords": [
-    "tizenbrew",
-    "samsung-tv",
-    "tizen",
-    "jiotv",
-    "live-tv",
-    "iptv"
+  "description": "Standalone JioTV streaming module for Samsung Smart TVs",
+  "packageType": "app",
+  "appName": "JioTV Live",
+  "appPath": "app/index.html",
+  "author": "JioTV Tizen Community",
+  "icon": "https://raw.githubusercontent.com/jiotv-go/jiotv_go/main/assets/jiotv.png",
+  "keys": [
+    "ColorF0Red",
+    "ColorF1Green",
+    "ColorF2Yellow",
+    "ColorF3Blue",
+    "MediaPlay",
+    "MediaPause",
+    "MediaPlayPause",
+    "MediaStop",
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "ChannelUp",
+    "ChannelDown"
   ],
   "license": "MIT"
 }
